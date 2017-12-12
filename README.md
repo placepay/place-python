@@ -4,7 +4,7 @@ A python package for interfacing with the RentShare API
 
 ## Installation
 
-To install from PyPi using [pip](http://www.pip-installer.org/en/latest/):
+To install from GitHub using [pip](http://www.pip-installer.org/en/latest/):
 
 ```bash
 pip install git+https://github.com/rentshare/rentshare-python.git
