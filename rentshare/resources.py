@@ -34,3 +34,28 @@ class Transaction(APIResource):
 class Address(APIResource):
     resource = '/addresses'
     object_type = 'address'
+
+
+class RecurringInvoice(APIResource):
+    resource = '/recurring_invoices'
+    object_type = 'recurring_invoice'
+
+
+class Invoice(APIResource):
+    resource = '/invoices'
+    object_type = 'invoice'
+
+
+class InvoiceItem(APIResource):
+    resource = '/invoice_items'
+    object_type = 'invoice_item'
+
+
+class InvoicePayer(APIResource):
+    resource = '/invoice_payers'
+    object_type = 'invoice_payer'
+
+
+class InvoiceItemAllocation(APIResource):
+    resource = '/invoice_item_allocations'
+    object_type = 'invoice_item_allocation'

@@ -24,7 +24,7 @@ def _walk_object(obj, client=None, inverse=False):
                 val = obj[key] = resource(client=client, **val)
                 break
         if isinstance(val, (list, dict)):
-            _walk_object(val, client=client)
+            _walk_object(val, client=client, inverse=inverse)
 
 
 class APIResource(object):
@@ -59,6 +59,9 @@ class APIResource(object):
         if attr in self._obj:
             return self._obj[attr]
         return super(APIResource, self).__getattr__(self, attr)
+
+    def json(self):
+        return json.dumps(_walk_object(self._obj, inverse=True), indent=4, sort_keys=True)
 
     @classmethod
     def _request(cls, method, path=None, id=None,
@@ -120,21 +123,19 @@ class APIResource(object):
         return cls._request('get', params=filter_by)
 
     @classmethod
-    def create(cls, **values):
-        _walk_object(values, inverse=True)
-        return cls._request('post', json=values)
+    def create(cls, obj=None, parent=None, **values):
+        if isinstance( obj, list ):
+            obj = {"object": "list", "values": objects}
+        else:
+            obj = dict(obj or {}, **values)
+        _walk_object(obj, inverse=True)
+        return cls._request('post', json=obj)
 
     @classmethod
-    def create_all(cls, objects):
-        return cls._request('post',
-                            json={"object": "list", "values": objects})
-
-    @classmethod
-    def update_all(cls, objects, **updates):
-        updates = [dict(id=o.id, **updates) for o in objects]
+    def update_all(cls, objects):
+        updates = [dict(id=o.id, **upd) for o, upd in objects]
         return cls._request('put',
                             json={"object": "list", "values": updates})
-
     @classmethod
     def delete_all(cls, objects):
         deletes = '|'.join(map(str, [o.id for o in objects]))
