@@ -5,9 +5,11 @@ import json
 import urlparse
 import os
 import pprint
+import copy
 
 
-def _walk_object(obj, client=None, inverse=False):
+def _conv_object(obj, client=None, inverse=False):
+    obj = copy.copy( obj )
     if isinstance(obj, list):
         _iter = enumerate(obj)
     else:
@@ -24,7 +26,8 @@ def _walk_object(obj, client=None, inverse=False):
                 val = obj[key] = resource(client=client, **val)
                 break
         if isinstance(val, (list, dict)):
-            _walk_object(val, client=client, inverse=inverse)
+            obj[key] = _conv_object(val, client=client, inverse=inverse)
+    return obj
 
 
 class APIResource(object):
@@ -50,7 +53,7 @@ class APIResource(object):
 
     def _set_obj(self, obj):
         self._obj = obj
-        _walk_object(self._obj, client=self._client)
+        self._obj = _conv_object(self._obj, client=self._client)
         if 'id' in obj:
             key = '{}_{}'.format(obj['object'], obj['id'])
             self._object_index[key] = self
@@ -61,7 +64,7 @@ class APIResource(object):
         return super(APIResource, self).__getattr__(self, attr)
 
     def json(self):
-        return json.dumps(_walk_object(self._obj, inverse=True), indent=4, sort_keys=True)
+        return json.dumps(_conv_object(self._obj, inverse=True), indent=4, sort_keys=True)
 
     @classmethod
     def _request(cls, method, path=None, id=None,
@@ -128,7 +131,7 @@ class APIResource(object):
             obj = {"object": "list", "values": objects}
         else:
             obj = dict(obj or {}, **values)
-        _walk_object(obj, inverse=True)
+        obj = _conv_object(obj, inverse=True)
         return cls._request('post', json=obj)
 
     @classmethod
