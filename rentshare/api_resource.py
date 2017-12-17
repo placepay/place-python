@@ -118,11 +118,17 @@ class APIResource(object):
         self._request('delete', id=self.id)
 
     @classmethod
-    def get(cls, id):
+    def get(cls, id, update=None):
+        if update:
+            return cls._request('post', id=id, json=update)
         return cls._request('get', id=id)
 
     @classmethod
-    def select(cls, **filter_by):
+    def select(cls, update_all=None, delete_all=False, **filter_by):
+        if update_all:
+            return cls._request('post', params=filter_by, json=update_all)
+        if delete_all:
+            return cls._request('delete', params=filter_by)
         return cls._request('get', params=filter_by)
 
     @classmethod
