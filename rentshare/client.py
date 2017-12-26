@@ -14,4 +14,4 @@ class Client(object):
 
     @property
     def api_url(self):
-        return self._api_key or rentshare.api_url
+        return self._api_url or rentshare.api_url
