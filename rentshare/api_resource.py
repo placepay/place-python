@@ -114,7 +114,7 @@ class APIResource(object):
     def update(self, **updates):
         self._request('put', id=self.id, json=updates)
 
-    def delete(self, **updates):
+    def delete(self):
         self._request('delete', id=self.id)
 
     @classmethod
@@ -132,9 +132,9 @@ class APIResource(object):
         return cls._request('get', params=filter_by)
 
     @classmethod
-    def create(cls, obj=None, parent=None, **values):
+    def create(cls, obj=None, **values):
         if isinstance( obj, list ):
-            obj = {"object": "list", "values": objects}
+            obj = {"object": "list", "values": obj}
         else:
             obj = dict(obj or {}, **values)
         obj = _conv_object(obj, inverse=True)

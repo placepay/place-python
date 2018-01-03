@@ -22,7 +22,7 @@ class Forbidden(APIException):
 
 
 class NotFound(APIException):
-    status_code = 403
+    status_code = 404
 
 
 class MethodNotAllowed(APIException):
