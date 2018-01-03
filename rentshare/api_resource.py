@@ -118,10 +118,10 @@ class APIResource(object):
         self._request('delete', id=self.id)
 
     @classmethod
-    def get(cls, id, update=None):
+    def get(cls, id, update=None, **params):
         if update:
-            return cls._request('post', id=id, json=update)
-        return cls._request('get', id=id)
+            return cls._request('post', id=id, json=update, params=params)
+        return cls._request('get', id=id, params=params)
 
     @classmethod
     def select(cls, update_all=None, delete_all=False, **filter_by):
@@ -141,10 +141,10 @@ class APIResource(object):
         return cls._request('post', json=obj)
 
     @classmethod
-    def update_all(cls, objects):
+    def update_all(cls, objects, **params):
         updates = [dict(id=o.id, **upd) for o, upd in objects]
         return cls._request('put',
-                            json={"object": "list", "values": updates})
+                            json={"object": "list", "values": updates}, params=params)
     @classmethod
     def delete_all(cls, objects):
         deletes = '|'.join(map(str, [o.id for o in objects]))
