@@ -31,6 +31,11 @@ class Transaction(APIResource):
     object_type = 'transaction'
 
 
+class PaymentMethod(APIResource):
+    resource = '/payment_methods'
+    object_type = 'payment_method'
+
+
 class Address(APIResource):
     resource = '/addresses'
     object_type = 'address'
