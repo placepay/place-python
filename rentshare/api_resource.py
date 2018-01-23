@@ -61,7 +61,6 @@ class APIResource(object):
     def __getattr__(self, attr):
         if attr in self._obj:
             return self._obj[attr]
-        return super(APIResource, self).__getattr__(self, attr)
 
     def json(self):
         return json.dumps(_conv_object(self._obj, inverse=True), indent=4, sort_keys=True)
