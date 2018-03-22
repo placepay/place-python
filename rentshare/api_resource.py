@@ -120,13 +120,13 @@ class APIResource(object):
     @classmethod
     def get(cls, id, update=None, **params):
         if update:
-            return cls._request('post', id=id, json=update, params=params)
+            return cls._request('put', id=id, json=update, params=params)
         return cls._request('get', id=id, params=params)
 
     @classmethod
     def select(cls, update_all=None, delete_all=False, **filter_by):
         if update_all:
-            return cls._request('post', params=filter_by, json=update_all)
+            return cls._request('put', params=filter_by, json=update_all)
         if delete_all:
             return cls._request('delete', params=filter_by)
         return cls._request('get', params=filter_by)
