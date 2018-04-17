@@ -2,7 +2,11 @@ from rentshare.exceptions import *
 import rentshare
 import requests
 import json
-import urlparse
+import sys
+if sys.version_info >= (3,0):
+    from urllib.parse import urljoin
+else:
+    from urlparse import urljoin
 import os
 import pprint
 import copy
@@ -72,7 +76,7 @@ class APIResource(object):
         client = client or rentshare.default_client
         if id:
             path = os.path.join(path, id)
-        url = urlparse.urljoin(client.api_url, path.strip('/'))
+        url = urljoin(client.api_url, path.strip('/'))
 
         kwargs['headers'] = kwargs.get('headers', {})
 

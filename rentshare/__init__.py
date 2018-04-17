@@ -8,7 +8,7 @@ Documentation: https://developer.rentshare.com
 :license: MIT License
 """
 
-from __about__ import __version__
+from .__about__ import __version__
 
 PROD_URL = 'https://api.rentshare.com'
 TEST_URL = 'https://staging-api.rentshare.com'
