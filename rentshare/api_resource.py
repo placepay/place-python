@@ -45,7 +45,7 @@ class APIResource(object):
             if key in cls._object_index:
                 cls._object_index[key]._set_obj(obj)
                 return cls._object_index[key]
-        return super(APIResource, cls).__new__(cls, client=None, **obj)
+        return super(APIResource, cls).__new__(cls)
 
     def __init__(self, client=None, **obj):
         self._client = client or rentshare.default_client
