@@ -1,4 +1,4 @@
-from rentshare.api_resource import APIResource
+from place.api_resource import APIResource
 
 
 class AccessToken(APIResource):

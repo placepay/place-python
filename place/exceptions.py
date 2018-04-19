@@ -1,7 +1,9 @@
 class APIException(Exception):
     error_type = None
     status_code = None
-
+    def __init__( self, msg=None, error_details=None ):
+        self.error_details = error_details
+        super( APIException, self ).__init__( msg )
 
 class InvalidArguments(APIException):
     error_type = 'InvalidArguments'

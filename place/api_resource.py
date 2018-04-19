@@ -1,5 +1,5 @@
-from rentshare.exceptions import *
-import rentshare
+from place.exceptions import *
+import place
 import requests
 import json
 import sys
@@ -48,7 +48,7 @@ class APIResource(object):
         return super(APIResource, cls).__new__(cls)
 
     def __init__(self, client=None, **obj):
-        self._client = client or rentshare.default_client
+        self._client = client or place.default_client
         self._set_obj(obj)
 
     def __repr__(self):
@@ -73,12 +73,14 @@ class APIResource(object):
     def _request(cls, method, path=None, id=None,
                  client=None, *args, **kwargs):
         path = path or cls.resource
-        client = client or rentshare.default_client
+        client = client or place.default_client
         if id:
             path = os.path.join(path, id)
         url = urljoin(client.api_url, path.strip('/'))
 
         kwargs['headers'] = kwargs.get('headers', {})
+        if 'X-API-Version' not in kwargs['headers']:
+            kwargs['headers']['X-API-Version'] = 'v2.5'
 
         kwargs['auth'] = (client.api_key, '')
 
@@ -107,8 +109,8 @@ class APIResource(object):
                     continue
                 if exc.error_type and exc.error_type != obj.get('error_type'):
                     continue
-                raise exc(obj.get('error_description'))
-            raise APIException(obj.get('error_description'))
+                raise exc(obj.get('error_description'), obj)
+            raise APIException(obj.get('error_description'), obj)
 
         if object_type == 'list':
             return [cls(client=client, **o) for o in obj['values']]

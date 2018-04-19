@@ -1,5 +1,5 @@
-import rentshare
-import rentshare.resources
+import place
+import place.resources
 from functools import partial
 
 
@@ -10,8 +10,8 @@ class Client(object):
 
     @property
     def api_key(self):
-        return self._api_key or rentshare.api_key
+        return self._api_key or place.api_key
 
     @property
     def api_url(self):
-        return self._api_url or rentshare.api_url
+        return self._api_url or place.api_url

@@ -6,7 +6,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-pkg_name = 'rentshare'
+pkg_name = 'place'
 
 install_requires = ['requests']
 
@@ -18,10 +18,10 @@ from __about__ import __version__
 setup(
     name=pkg_name,
     version=__version__,
-    description='RentShare python library',
-    author='RentShare',
-    author_email='help@rentshare.com',
-    url='https://github.com/rentshare/python-rentshare',
+    description='Place python library',
+    author='Place',
+    author_email='help@placepay.com',
+    url='https://github.com/placepay/place-python',
     packages=[pkg_name],
     install_requires=install_requires,
     classifiers=[
