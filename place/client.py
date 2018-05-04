@@ -14,4 +14,8 @@ class Client(object):
 
     @property
     def api_url(self):
-        return self._api_url or place.api_url
+        if self._api_url:
+            return self._api_url
+        if self.api_key.startswith('test_') and place.api_url == place.PROD_URL:
+            return place.TEST_URL
+        return place.api_url

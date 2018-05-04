@@ -124,6 +124,8 @@ class APIResource(object):
 
     @classmethod
     def get(cls, id, update=None, **params):
+        if not id:
+            raise ValueError('id cannot be empty')
         if update:
             return cls._request('put', id=id, json=update, params=params)
         return cls._request('get', id=id, params=params)
