@@ -37,6 +37,7 @@ def _conv_object(obj, client=None, inverse=False):
 class APIResource(object):
     resource = None
     object_type = None
+    default_params = None
     _object_index = {}
 
     def __new__(cls, client=None, **obj):
@@ -83,6 +84,10 @@ class APIResource(object):
             kwargs['headers']['X-API-Version'] = 'v2.5'
 
         kwargs['auth'] = (client.api_key, '')
+        if cls.default_params:
+            if 'params' not in kwargs: kwargs['params'] = {}
+            for k, v in cls.default_params.items():
+                if k not in kwargs['params']: kwargs['params'][k] = v
 
         response = getattr(requests, method)(url, *args, **kwargs)
         status_code = response.status_code
