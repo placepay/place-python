@@ -7,7 +7,7 @@ A python package for interfacing with the Place API
 To install from GitHub using [pip](http://www.pip-installer.org/en/latest/):
 
 ```bash
-pip install git+https://github.com/placepay/place-python.git
+pip install place
 ```
 
 If you don't have pip, it can be installed using the below command:
