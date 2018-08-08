@@ -15,6 +15,9 @@ directory = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(directory, pkg_name))
 from __about__ import __version__
 
+with open(os.path.join(directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(
     name=pkg_name,
     version=__version__,
@@ -22,6 +25,8 @@ setup(
     author='Place',
     author_email='help@placepay.com',
     url='https://github.com/placepay/place-python',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     packages=[pkg_name],
     install_requires=install_requires,
     classifiers=[
