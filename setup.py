@@ -7,6 +7,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
+dist_name = 'place-api'
 pkg_name = 'place'
 
 install_requires = ['requests']
@@ -20,7 +21,7 @@ with open(os.path.join(directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name=pkg_name,
+    name=dist_name,
     version=__version__,
     description='Place python library',
     author='Place',
