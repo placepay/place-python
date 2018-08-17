@@ -33,8 +33,41 @@ def _conv_object(obj, client=None, inverse=False):
             obj[key] = _conv_object(val, client=client, inverse=inverse)
     return obj
 
+class APIFilter(object):
+    def __init__(self, param, val):
+        self.param = param
+        self.val = val
+    def __or__(self, other):
+        if not isinstance( other, APIFilter ):
+            raise TypeError('invalid type')
+        if other.param != self.param:
+            raise ValueError('or only works on the same field')
+        return APIFilter( self.param, '|'.join([ self.val, other.val ]) )
+
+class APIField(object):
+    def __init__(self, param):
+        self.param = param
+    def __eq__(self, other):
+        return APIFilter( self.param, '{}'.format(other) )
+    def __ne__(self, other):
+        return APIFilter( self.param, '!{}'.format(other) )
+    def __lt__(self, other):
+        return APIFilter( self.param, '<{}'.format(other) )
+    def __le__(self, other):
+        return APIFilter( self.param, '<={}'.format(other) )
+    def __gt__(self, other):
+        return APIFilter( self.param, '>{}'.format(other) )
+    def __ge__(self, other):
+        return APIFilter( self.param, '>={}'.format(other) )
+    def contains(self, other):
+        return APIFilter( self.param, '?*{}*'.format(other) )
+
+class APIMetaResource(type):
+    def __getattr__(cls, key):
+        return APIField(key)
 
 class APIResource(object):
+    __metaclass__ = APIMetaResource
     resource = None
     object_type = None
     default_params = None
@@ -136,7 +169,13 @@ class APIResource(object):
         return cls._request('get', id=id, params=params)
 
     @classmethod
-    def select(cls, update_all=None, delete_all=False, **filter_by):
+    def select(cls, *params, **filter_by):
+        update_all = filter_by.pop('update_all',None)
+        delete_all = filter_by.pop('delete_all',False)
+        if params:
+            filter_by = dict( ( param.param, [] ) for param in params )
+            for param in params:
+                filter_by[param.param].append( param.val )
         if update_all:
             return cls._request('put', params=filter_by, json=update_all)
         if delete_all:
